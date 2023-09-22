@@ -48,6 +48,11 @@ pipeline {
                 bat 'python docker_backend_testing.py'
             }
         }
+        stage('Deploy helm chart') {
+            steps {
+                bat 'helm upgrade --install my-release. --set image.tag=toby4all/tobby_pipeline:${BUILD_NUMBER}'
+            }
+        }
     }
      post {
         always {

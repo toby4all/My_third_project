@@ -1,7 +1,7 @@
 replicaCount: 5
 
 image:
-  repository: toby4all/tobby_pipeline:${BUILD_NUMBER}
+  repository: toby4all/tobby_pipeline
   pullPolicy: Always
   tag: ""
 
