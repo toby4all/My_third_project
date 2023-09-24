@@ -58,6 +58,7 @@ pipeline {
         always {
             bat "docker compose down"
             bat "rmi ${registry}:${BUILD_NUMBER}"
+            bat "helm delete chart my-release"
         }
     }
 }
