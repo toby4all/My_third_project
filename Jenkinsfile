@@ -7,18 +7,19 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5'))
     }
     environment {
-    registry = "toby4all/tobby_pipeline"  // The name of your user and repository (which can be created manually)
-    DOCKERHUB_CREDENTIALS = credentials('dockerhub') // The credentials used to your repo
+        registry = "toby4all/tobby_pipeline"  // The name of your user and repository (which can be created manually)
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub') // The credentials used for your repo
+        IMAGE_VERSION = "${BUILD_NUMBER}"  // Use the build number as the image version
     }
     stages {
         stage('Checkout') {
             steps {
-               git([url: 'https://github.com/toby4all/My_third_project.git', branch: 'master'])
+                git([url: 'https://github.com/toby4all/My_third_project.git', branch: 'master'])
             }
         }
         stage('Build') {
             steps {
-                bat 'docker build -t toby4all/tobby_pipeline:${BUILD_NUMBER} .'
+                bat "docker build -t ${registry}:${IMAGE_VERSION} ."
             }
         }
         stage('Login') {
@@ -30,12 +31,12 @@ pipeline {
         }
         stage('Push') {
             steps {
-                bat 'docker push toby4all/tobby_pipeline:${BUILD_NUMBER}'
+                bat "docker push ${registry}:${IMAGE_VERSION}"
             }
         }
         stage('Set image version') {
             steps {
-                bat "echo IMAGE_TAG=${BUILD_NUMBER} > .env"
+                bat "echo IMAGE_TAG=${IMAGE_VERSION} > .env"
             }
         }
         stage('Run docker compose') {
@@ -50,15 +51,15 @@ pipeline {
         }
         stage('Deploy helm chart') {
             steps {
-                bat 'helm upgrade --install my-release. --set image.tag=toby4all/tobby_pipeline:${BUILD_NUMBER}'
+                bat "helm upgrade --install my-release. --set image.tag=${registry}:${IMAGE_VERSION}"
             }
         }
     }
-     post {
+    post {
         always {
             bat "docker compose down"
-            bat "rmi ${registry}:${BUILD_NUMBER}"
-            bat "helm delete chart my-release"
+            bat "rmi ${registry}:${IMAGE_VERSION}"
+            bat "helm delete my-release"
         }
     }
 }
