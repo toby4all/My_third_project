@@ -1,9 +1,23 @@
-FROM python:3.7-alpine
+# Use a more recent Python Alpine image
+FROM python:3.9-alpine
+
+# Set the working directory
 WORKDIR /app
-COPY rest_app.py /app
-COPY db_connector.py /app
-COPY requirements.txt /app
-RUN pip install -r requirements.txt
+
+# Copy the Python source files and requirements.txt
+COPY rest_app.py db_connector.py requirements.txt ./
+
+# Update and upgrade Alpine packages, and install required system dependencies
+RUN apk update && apk upgrade && \
+    apk add --no-cache build-base && \
+    pip install --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Expose the port
 EXPOSE 5000
+
+# Define a volume for logs
 VOLUME /app/logs
-CMD python3 rest_app.py
+
+# Run the Python application
+CMD ["python3", "rest_app.py"]
