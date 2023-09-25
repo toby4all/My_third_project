@@ -42,7 +42,7 @@ pipeline {
          stage('Copy Docker Compose Config') {
             steps {
                 // Copy the docker-compose.yaml from the repository to the workspace
-                bat 'copy docker-compose.yaml .'
+                bat 'copy docker_compose.yaml .'
             }
         }
         stage('Run docker compose') {
