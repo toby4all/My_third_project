@@ -39,6 +39,12 @@ pipeline {
                 bat "echo IMAGE_TAG=${IMAGE_VERSION} > .env"
             }
         }
+         stage('Copy Docker Compose Config') {
+            steps {
+                // Copy the docker-compose.yaml from the repository to the workspace
+                bat 'cp docker-compose.yaml .'
+            }
+        }
         stage('Run docker compose') {
             steps {
                 bat 'docker compose up -d'
