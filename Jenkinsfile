@@ -10,6 +10,7 @@ pipeline {
         registry = "toby4all/tobby_pipeline"  // The name of your user and repository (which can be created manually)
         DOCKERHUB_CREDENTIALS = credentials('dockerhub') // The credentials used for your repo
         IMAGE_VERSION = "${BUILD_NUMBER}"  // Use the build number as the image version
+        IMAGE_TAG = "${BUILD_NUMBER}"  // Define IMAGE_TAG here
     }
     stages {
         stage('Checkout') {
