@@ -53,6 +53,7 @@ pipeline {
         stage('Deploy helm chart') {
             steps {
                 bat "helm upgrade --install my-release. --set image.tag=${registry}:${IMAGE_VERSION}"
+                bat "minikube service python-flask-service -url > k8s_url.txt"
             }
         }
     }
