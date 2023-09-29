@@ -7,10 +7,11 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5'))
     }
     environment {
-        registry = "toby4all/tobby_pipeline"  // The name of your user and repository (which can be created manually)
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub') // The credentials used for your repo
+        registry = "toby4all/tobby_pipeline"  // Replace with your Docker Hub username and repository
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub') // Replace with your Jenkins credentials ID for Docker Hub
         IMAGE_VERSION = "${BUILD_NUMBER}"  // Use the build number as the image version
         IMAGE_TAG = "${BUILD_NUMBER}"  // Define IMAGE_TAG here
+        PYTHON_PATH = "C:\\Users\\Toby\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"  // Replace with the correct path to Python on your Jenkins agent
     }
     stages {
         stage('Checkout') {
@@ -20,48 +21,97 @@ pipeline {
         }
         stage('Build') {
             steps {
-                bat "docker build -t ${registry}:${IMAGE_VERSION} ."
-            }
-        }
-        stage('Login') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
-                    bat "docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}"
+                script {
+                    // Build the Docker image
+                    def buildCommand = "docker build -t ${registry}:${IMAGE_VERSION} ."
+                    bat(buildCommand)
                 }
             }
         }
-        stage('Push') {
+        stage('Login to Docker Hub') {
             steps {
-                bat "docker push ${registry}:${IMAGE_VERSION}"
+                script {
+                    // Log in to Docker Hub
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'dockerhubPassword', usernameVariable: 'dockerhubUser')]) {
+                        def loginCommand = "docker login -u ${env.dockerhubUser} -p ${env.dockerhubPassword}"
+                        bat(loginCommand)
+                    }
+                }
+            }
+        }
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    // Push the Docker image to Docker Hub
+                    def pushCommand = "docker push ${registry}:${IMAGE_VERSION}"
+                    bat(pushCommand)
+                }
             }
         }
         stage('Set image version') {
             steps {
-                bat "echo IMAGE_TAG=${IMAGE_VERSION} > .env"
+                script {
+                    // Create an environment file to store the image version
+                    def createEnvFile = "echo IMAGE_TAG=${IMAGE_VERSION} > .env"
+                    bat(createEnvFile)
+                }
             }
         }
-        stage('Run docker compose') {
+        stage('Run Docker Compose') {
             steps {
-                bat 'docker compose up -d'
+                script {
+                    // Start Docker Compose
+                    def composeUpCommand = "docker-compose up -d"
+                    bat(composeUpCommand)
+                }
             }
         }
-        stage('Test docker compose') {
+        stage('Test Docker Compose') {
             steps {
-                bat 'python docker_backend_testing.py'
+                script {
+                    // Add Python to the PATH and run the testing script
+                    env.PATH = "${PYTHON_PATH};${env.PATH}"
+                    def testCommand = "python docker_backend_testing.py"
+                    bat(testCommand)
+                }
             }
         }
-        stage('Deploy helm chart') {
+        stage('Deploy Helm Chart') {
             steps {
-                bat "helm upgrade --install my-release. --set image.tag=${registry}:${IMAGE_VERSION}"
-                bat "minikube service python-flask-service -url > k8s_url.txt"
+                script {
+                    // Deploy the Helm chart
+                    def helmDeployCommand = "helm upgrade --install my-release. --set image.tag=${registry}:${IMAGE_VERSION}"
+                    bat(helmDeployCommand)
+                }
+            }
+        }
+        stage('Test Deployed Helm Chart') {
+            steps {
+                script {
+                    // Test the deployed Helm chart
+                    def testCommand = "python K8S_backend_testing.py"
+                    bat(testCommand)
+
+                    // Run the minikube service command and save the URL to a file
+                    def minikubeServiceCommand = "minikube service python-flask-service -url > k8s_url.txt"
+                    bat(minikubeServiceCommand)
+                }
             }
         }
     }
     post {
         always {
-            bat "docker compose down"
-            bat "rmi ${registry}:${IMAGE_VERSION}"
-            bat "helm delete my-release"
+            script {
+                // Cleanup after the pipeline run
+                def downCommand = "docker-compose down"
+                def rmiCommand = "docker rmi ${registry}:${IMAGE_VERSION}"
+                def helmDeleteCommand = "helm delete my-release"
+
+                bat(downCommand)
+                bat(rmiCommand)
+                bat(helmDeleteCommand)
+            }
         }
     }
 }
+
