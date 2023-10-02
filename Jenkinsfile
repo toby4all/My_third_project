@@ -66,6 +66,15 @@ pipeline {
                 }
             }
         }
+        stage('install request module') {
+            steps {
+                script {
+                     // Install the 'requests' module
+                    def installRequestsCommand = "\"C:\\Users\\Toby\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" -m pip install requests"
+                    bat(installRequestsCommand)
+                }
+            }
+        }
         stage('Test Docker Compose') {
             steps {
                 script {

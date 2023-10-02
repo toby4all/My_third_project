@@ -5,6 +5,22 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - server
+      - mysql
+  mysql:
+    image: mysql:latest
+    container_name: my-mysql-container
+    environment:
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: schema_name
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
   server:
     image: "toby4all/tobby_pipeline:${IMAGE_TAG}"
+
+volumes:
+  mysql_data:
+
+
