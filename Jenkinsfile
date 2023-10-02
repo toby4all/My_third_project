@@ -70,8 +70,7 @@ pipeline {
             steps {
                 script {
                     // Add Python to the PATH and run the testing script
-                    env.PATH = "${PYTHON_PATH};${env.PATH}"
-                    def testCommand = "python docker_backend_testing.py"
+                    def testCommand = "\"C:\\Users\\Toby\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" docker_backend_testing.py"
                     bat(testCommand)
                 }
             }
@@ -89,7 +88,7 @@ pipeline {
             steps {
                 script {
                     // Test the deployed Helm chart
-                    def testCommand = "python K8S_backend_testing.py"
+                    def testCommand = "\"C:\\Users\\Toby\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" K8S_backend_testing.py"
                     bat(testCommand)
 
                     // Run the minikube service command and save the URL to a file
