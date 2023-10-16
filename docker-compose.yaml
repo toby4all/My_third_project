@@ -1,26 +1,59 @@
-version: "3"
+version: "3.7"
 services:
-  web:
-    build: .
-    ports:
-      - "5000:5000"
-    depends_on:
-      - mysql
-  mysql:
-    image: mysql:latest
-    container_name: my-mysql-container
+  devops-db:
+    hostname: devops-db
+    container_name: devops-db
+    image: mysql:8.0.33
+    restart: always
     environment:
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: schema_name
+      MYSQL_DATABASE: ${db_user}
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: ${db_user}
+      # You can use whatever password you like
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      # Password for root access
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    secrets:
+      - db_password
+      - db_root_password
     ports:
+      # <Port exposed> : <MySQL Port running inside container>
       - "3306:3306"
+    expose:
+      # Opens port 3306 on the container
+      - "3306"
     volumes:
-      - mysql_data:/var/lib/mysql
-  server:
-    image: "toby4all/tobby_pipeline:${IMAGE_TAG}"
-
-volumes:
-  mysql_data:
+      - my-db:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+  devops-rest:
+      build: .
+      hostname: devops-rest
+      container_name: devops-rest
+      image: toby4all/tobby_pipeline:${IMAGE_TAG}
+      depends_on:
+        devops-db:
+          condition: service_healthy
+      environment:
+        db_host: ${db_host}
+        db_port: ${db_port}
+        db_user: ${db_user}
+        db_pass: /run/secrets/db_password
+      secrets:
+        - db_password
+      ports:
+        - "5000:5000"
+      expose:
+        - "5000"
+      # Healthcheck to check server is up
+      # see healthcheck output using - docker inspect --format "{{json .State.Health }}" <container name>
+      healthcheck:
+        test: curl --fail http://localhost:5000/users/1 || exit 1
+        interval: 10s
+        timeout: 5s
+        retries: 5
+        start_period: 10s
 
 

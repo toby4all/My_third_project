@@ -22,7 +22,7 @@ conn = pymysql.connect(host='127.0.0.1', port=3306, user='user', passwd='passwor
 cursor = conn.cursor()
 
 # Getting all data from table “users”
-cursor.execute(f"SELECT * FROM {schema_name}.users WHERE user_id ='5' ")
+cursor.execute(f"SELECT * FROM {schema_name}.users WHERE user_id ='5'")
 
 # Iterating table and printing all users
 for row in cursor:

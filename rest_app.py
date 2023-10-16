@@ -18,7 +18,7 @@ def user(user_id):
         else:
             return jsonify({'status': 'error', 'reason': 'id already exist'}, + 500)  # status cod
     elif request.method == 'GET':
-        if user_id in range(0,7):
+        if user_id in range(0,6):
             user_name = get_user(user_id)
             return jsonify({'status': 'ok', 'user_name': user_name}, 200 ) # status code
         else:
