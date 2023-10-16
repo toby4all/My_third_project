@@ -69,9 +69,11 @@ pipeline {
         stage('install request module') {
             steps {
                 script {
-                     // Install the 'requests' module
+                     // Install the 'requests and pymysql' module
                     def installRequestsCommand = "\"C:\\Users\\Toby\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" -m pip install requests"
+                    def installPymysqlCommand = "\"C:\\Users\\Toby\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" -m pip install pymysql"
                     bat(installRequestsCommand)
+                    bat(installPymysqlCommand)
                 }
             }
         }
