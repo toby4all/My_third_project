@@ -35,7 +35,7 @@ services:
      secrets:
        - db_password
      healthcheck:
-       test: ["CMD", "curl --fail http://localhost:5000/users/1 || exit 1"]
+       test:  curl --fail http://localhost:5000/users/1 || exit 1
        interval: 10s
        timeout: 5s
        retries: 5
