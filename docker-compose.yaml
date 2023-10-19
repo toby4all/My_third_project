@@ -24,7 +24,6 @@ services:
       timeout: 20s
       retries: 10
   devops-rest:
-    build: .
     hostname: devops-rest
     container_name: devops-rest
     image: toby4all/tobby_pipeline:${IMAGE_TAG}
