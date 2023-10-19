@@ -28,6 +28,8 @@ services:
      image: toby4all/tobby_pipeline:${IMAGE_TAG}
      ports:
        - "5000:5000"
+     expose:
+       - "5000"
      environment:
        MYSQL_DB_HOST: db:3307
        MYSQL_DB_USER: user
