@@ -3,7 +3,7 @@ services:
   devops-db:
     hostname: devops-db
     container_name: devops-db
-    image: mysql:8.0.33
+    image: toby4all/mysql:8.0.33
     restart: always
     volumes:
       - ./mydb:/var/lib/mysql
