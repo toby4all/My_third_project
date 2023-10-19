@@ -5,6 +5,8 @@ services:
     container_name: devops-db
     image: mysql:8.0.33
     restart: always
+    volumes:
+      - ./mydb:/var/lib/mysql
     environment:
       MYSQL_DATABASE: mydb
       MYSQL_USER: user
@@ -17,8 +19,6 @@ services:
       - "3306:3306"
     expose:
       - "3306"
-    volumes:
-      - ./mydb:/var/lib/mysql
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       timeout: 20s
@@ -48,6 +48,15 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
+secrets:
+   db_password:
+     file: db_password.txt
+   db_root_password:
+     file: db_root_password.txt
+
+volumes:
+    mydb:
 
 
 
