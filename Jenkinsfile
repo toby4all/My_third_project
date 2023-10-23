@@ -117,7 +117,7 @@ pipeline {
                 def rmiCommand = "docker rmi ${registry}:${IMAGE_VERSION}"
                 def helmDeleteCommand = "helm delete my-release"
 
-                bat(downCommand)
+//                 bat(downCommand)
                 bat(rmiCommand)
                 bat(helmDeleteCommand)
             }
