@@ -5,7 +5,7 @@ services:
      volumes:
        - ./mydb:/var/lib/mysql
      environment:
-       MYSQL_ROOT_PASSWORD: pass123
+       MYSQL_ROOT_PASSWORD: mysql
        MYSQL_DATABASE: mydb
        MYSQL_USER: user
      ports:
@@ -28,8 +28,8 @@ services:
       - "5000"
     environment:
       MYSQL_DB_HOST: db:3306
-      MYSQL_DB_USER: root
-      MYSQL_DB_PASSWORD: pass123
+      MYSQL_DB_USER: user
+      MYSQL_DB_PASSWORD: password
     healthcheck:
       test:  curl --fail http://localhost:5000/users/1 || exit 1
       interval: 10s
