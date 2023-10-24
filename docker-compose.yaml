@@ -1,56 +1,43 @@
 version: "3.7"
 services:
-   db:
+  db:
      image: mysql:8.0.33
      volumes:
        - ./mydb:/var/lib/mysql
      environment:
-       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+       MYSQL_ROOT_PASSWORD: pass123
        MYSQL_DATABASE: mydb
        MYSQL_USER: user
-       MYSQL_PASSWORD_FILE: /run/secrets/db_password
-     secrets:
-       - db_root_password
-       - db_password
      ports:
-       - "3307:3306"
+       - "3306:3306"
      expose:
-       - "3307"
+       - "3306"
      healthcheck:
        test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
        interval: 10s
        timeout: 5s
        retries: 5
 
-   devops-rest:
-     depends_on:
-       - db
-     image: toby4all/tobby_pipeline:${IMAGE_TAG}
-     ports:
-       - "5000:5000"
-     expose:
-       - "5000"
-     environment:
-       MYSQL_DB_HOST: db:3307
-       MYSQL_DB_USER: user
-       MYSQL_DB_PASSWORD_FILE: /run/secrets/db_password
-     secrets:
-       - db_password
-     healthcheck:
-       test:  curl --fail http://localhost:5000/users/1 || exit 1
-       interval: 10s
-       timeout: 5s
-       retries: 5
-
-secrets:
-   db_password:
-     file: db_password.txt
-   db_root_password:
-     file: db_root_password.txt
+  devops-rest:
+    depends_on:
+      - db
+    image: toby4all/tobby_pipeline:${IMAGE_TAG}
+    ports:
+      - "5000:5000"
+    expose:
+      - "5000"
+    environment:
+      MYSQL_DB_HOST: db:3306
+      MYSQL_DB_USER: root
+      MYSQL_DB_PASSWORD: pass123
+    healthcheck:
+      test:  curl --fail http://localhost:5000/users/1 || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
     mydb:
-
 
 
 
