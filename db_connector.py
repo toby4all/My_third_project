@@ -3,7 +3,7 @@ import pymysql
 def add_user(user_id, username):
     schema_name = 'mydb'
     # Establishing a connection to the MySQL container within the Docker Compose network
-    conn = pymysql.connect(host='db', port=3307, user='user', password='password', db=schema_name)
+    conn = pymysql.connect(host='db', port=3306, user='user', password='password', db=schema_name)
     conn.autocommit(True)
 
     # Getting a cursor from the database connection
@@ -21,7 +21,7 @@ def add_user(user_id, username):
 def get_user(user_id):
     schema_name = 'mydb'
     # Establishing a connection to the MySQL container within the Docker Compose network
-    conn = pymysql.connect(host='db', port=3307, user='user', password='password', db=schema_name)
+    conn = pymysql.connect(host='db', port=3306, user='user', password='password', db=schema_name)
     conn.autocommit(True)
 
     # Getting a cursor from the database connection
@@ -44,7 +44,7 @@ def get_user(user_id):
 def update_user(user_id, username):
     schema_name = 'mydb'
     # Establishing a connection to the MySQL container within the Docker Compose network
-    conn = pymysql.connect(host='db', port=3307, user='user', password='password', db=schema_name)
+    conn = pymysql.connect(host='db', port=3306, user='user', password='password', db=schema_name)
     conn.autocommit(True)
 
     # Getting a cursor from the database connection
@@ -63,7 +63,7 @@ def update_user(user_id, username):
 def delete_user(user_id):
     schema_name = 'mydb'
     # Establishing a connection to the MySQL container within the Docker Compose network
-    conn = pymysql.connect(host='db', port=3307, user='user', password='password', db=schema_name)
+    conn = pymysql.connect(host='db', port=3306, user='user', password='password', db=schema_name)
     conn.autocommit(True)
 
     # Getting a cursor from the database connection
