@@ -31,7 +31,7 @@ services:
       MYSQL_DB_USER: user
       MYSQL_DB_PASSWORD: password
     healthcheck:
-      test: ["CMD", "curl", "--fail", "http://localhost:5000/users/1"]
+      test: ["CMD", "curl", "--fail", "http://db:3306"]
       interval: 10s
       timeout: 5s
       retries: 5
