@@ -8,6 +8,7 @@ services:
       MYSQL_ROOT_PASSWORD: mysql
       MYSQL_DATABASE: mydb
       MYSQL_USER: user
+      MYSQL_PASSWORD: password # Updated the user's password
     ports:
       - "3306:3306"
     expose:
@@ -29,7 +30,7 @@ services:
     environment:
       MYSQL_DB_HOST: db:3306
       MYSQL_DB_USER: user
-      MYSQL_DB_PASSWORD: password
+      MYSQL_DB_PASSWORD: password # Updated the user's password
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://db:3306"]
       interval: 10s
@@ -38,6 +39,7 @@ services:
 
 volumes:
   mydb:
+
 
 
 
