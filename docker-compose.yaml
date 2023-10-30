@@ -27,8 +27,8 @@ services:
       - "5000:5000"
     environment:
       MYSQL_DB_HOST: db # Use the service name as the hostname
-      MYSQL_DB_USER: user
-      MYSQL_DB_PASSWORD: password
+      MYSQL_DB_USER: root
+      MYSQL_DB_PASSWORD: mysql
     healthcheck:
       test: ["CMD", "curl", "--fail", "http://db:3306"]
       interval: 10s
