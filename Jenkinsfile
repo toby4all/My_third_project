@@ -10,6 +10,7 @@ pipeline {
         registry = "toby4all/tobby_pipeline"  // Replace with your Docker Hub username and repository
         DOCKERHUB_CREDENTIALS = credentials('dockerhub') // Replace with your Jenkins credentials ID for Docker Hub
         IMAGE_VERSION = "${BUILD_NUMBER}"  // Use the build number as the image version
+        IMAGE_TAG = "${BUILD_NUMBER}"  // Define IMAGE_TAG here
         PYTHON_PATH = "C:\\Users\\Toby\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"  // Replace with the correct path to Python on your Jenkins agent
     }
     stages {
@@ -56,6 +57,15 @@ pipeline {
                 }
             }
         }
+        stage('Run Docker Compose') {
+            steps {
+                script {
+                    // Start Docker Compose
+                    def composeUpCommand = "docker-compose up -d"
+                    bat(composeUpCommand)
+                }
+            }
+        }
         stage('install request module') {
             steps {
                 script {
@@ -67,11 +77,20 @@ pipeline {
                 }
             }
         }
+        stage('Test Docker Compose') {
+            steps {
+                script {
+                    // Add Python to the PATH and run the testing script
+                    def testCommand = "\"C:\\Users\\Toby\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" docker_backend_testing.py"
+                    bat(testCommand)
+                }
+            }
+        }
         stage('Deploy Helm Chart') {
             steps {
                 script {
-                    // Deploy or upgrade the Helm chart with your desired configuration
-                    def helmDeployCommand = "helm upgrade --install my-release ./TobbyOnK8S --set image.tag=${registry}:${IMAGE_VERSION}"
+                    // Deploy the Helm chart
+                    def helmDeployCommand = "helm upgrade --install my-release. --set image.tag=${registry}:${IMAGE_VERSION}"
                     bat(helmDeployCommand)
                 }
             }
@@ -94,14 +113,15 @@ pipeline {
         always {
             script {
                 // Cleanup after the pipeline run
+                def downCommand = "docker-compose down"
                 def rmiCommand = "docker rmi ${registry}:${IMAGE_VERSION}"
                 def helmDeleteCommand = "helm delete my-release"
 
+//                 bat(downCommand)
                 bat(rmiCommand)
                 bat(helmDeleteCommand)
             }
         }
     }
 }
-
 
