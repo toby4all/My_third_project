@@ -1,0 +1,27 @@
+# Values for the rest_app deployment
+rest_app:
+  image:
+    repository: toby4all/tobby_pipeline
+    pullPolicy: Always
+    tag: ""
+
+# Values for the MySQL 8.0.33 database deployment
+mysql:
+  image:
+    repository: mysql
+    tag: "8.0.33"
+  rootPassword: mysql
+  databaseName: mydb
+  mysqlUser: user  # Add the MySQL user here
+  mysqlPassword: password  # Add the MySQL password here
+
+# Service configuration for the rest_app
+service:
+  rest_app:
+    name: rest-app-service
+    type: LoadBalancer
+
+# Common configuration
+replicaCount: 5
+
+
