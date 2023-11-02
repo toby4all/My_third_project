@@ -1,7 +1,7 @@
 # Values for the rest_app deployment
 rest_app:
   image:
-    repository: toby4all/tobby_pipeline
+    repository: toby4all/tobby_pipeline-rest-app
     pullPolicy: Always
     tag: ""
 
@@ -23,5 +23,6 @@ service:
 
 # Common configuration
 replicaCount: 5
+
 
 
