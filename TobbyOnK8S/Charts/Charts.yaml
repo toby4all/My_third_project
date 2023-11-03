@@ -1,6 +1,6 @@
 apiVersion: v2
 appVersion: 1.16.0
-description: A Helm chart for deploying a Flask server in Python on Kubernetes
+description: A Helm chart for deploying a Flask server in Python and a MySQL database on Kubernetes
 name: TobbyOnK8S
 type: application
 version: 0.1.0
@@ -12,4 +12,6 @@ maintainers:
 keywords:
   - Flask
   - Python
+  - MySQL
   - Kubernetes
+

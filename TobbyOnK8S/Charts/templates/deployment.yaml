@@ -15,6 +15,6 @@ spec:
       containers:
       - name: python-flask
         image: {{ .Values.image.repository }}
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.rest_app.image.pullPolicy }}
         ports:
         - containerPort: 5000

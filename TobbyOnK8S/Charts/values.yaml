@@ -12,8 +12,8 @@ mysql:
     tag: "8.0.33"
   rootPassword: mysql
   databaseName: mydb
-  mysqlUser: user  # Add the MySQL user here
-  mysqlPassword: password  # Add the MySQL password here
+  mysqlUser: user
+  mysqlPassword: password
 
 # Service configuration for the rest_app
 service:
@@ -21,8 +21,15 @@ service:
     name: rest-app-service
     type: LoadBalancer
 
+# Service configuration for MySQL
+service:
+  mysql:
+    name: mysql-service
+    type: ClusterIP  # Choose the appropriate service type for MySQL
+
 # Common configuration
 replicaCount: 5
+
 
 
 
