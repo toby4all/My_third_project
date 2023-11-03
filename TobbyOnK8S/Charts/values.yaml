@@ -1,7 +1,7 @@
 # Values for the rest_app deployment
 rest_app:
   image:
-    repository: toby4all/tobby_pipeline-rest-app
+    repository: toby4all/tobby_pipeline
     pullPolicy: Always
     tag: ""
 
