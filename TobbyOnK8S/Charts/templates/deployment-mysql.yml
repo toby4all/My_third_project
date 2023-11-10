@@ -12,7 +12,7 @@ spec:
       containers:
       - name: mysql
         image: {{ .Values.mysql.image.repository }}:{{ .Values.mysql.image.tag }}
-        imagePullPolicy: Always
+        imagePullPolicy: {{ .Values.mysql.imagePullPolicy }}  # Use the value from values.yaml
         ports:
         - containerPort: 3306
         env:

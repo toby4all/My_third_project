@@ -12,6 +12,7 @@ pipeline {
         IMAGE_VERSION = "${BUILD_NUMBER}"  // Use the build number as the image version
         IMAGE_TAG = "${BUILD_NUMBER}"  // Define IMAGE_TAG here
         PYTHON_PATH = "C:\\Users\\Toby\\AppData\\Local\\Programs\\Python\\Python311\\python.exe"  // Replace with the correct path to Python on your Jenkins agent
+        HELM_CHART_PATH = "./TobbyOnK8S"  // Replace with the correct path to your Helm chart directory
     }
     stages {
         stage('Checkout') {
@@ -57,15 +58,6 @@ pipeline {
                 }
             }
         }
-        stage('Run Docker Compose') {
-            steps {
-                script {
-                    // Start Docker Compose
-                    def composeUpCommand = "docker-compose up -d"
-                    bat(composeUpCommand)
-                }
-            }
-        }
         stage('install request module') {
             steps {
                 script {
@@ -90,7 +82,7 @@ pipeline {
             steps {
                 script {
                     // Deploy the Helm chart
-                    def helmDeployCommand = "helm upgrade --install my-release. --set image.tag=${registry}:${IMAGE_VERSION}"
+                    def helmDeployCommand = "helm upgrade --install my-release ${HELM_CHART_PATH} --set image.tag=${registry}:${IMAGE_VERSION}"
                     bat(helmDeployCommand)
                 }
             }
@@ -113,15 +105,12 @@ pipeline {
         always {
             script {
                 // Cleanup after the pipeline run
-                def downCommand = "docker-compose down"
                 def rmiCommand = "docker rmi ${registry}:${IMAGE_VERSION}"
                 def helmDeleteCommand = "helm delete my-release"
 
-//                 bat(downCommand)
                 bat(rmiCommand)
                 bat(helmDeleteCommand)
             }
         }
     }
 }
-

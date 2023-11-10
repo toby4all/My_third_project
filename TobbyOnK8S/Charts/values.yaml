@@ -2,8 +2,7 @@
 rest_app:
   image:
     repository: toby4all/tobby_pipeline
-    pullPolicy: Always
-    tag: ""
+    pullPolicy: Always  # Set to "Always" for the rest-app
 
 # Values for the MySQL 8.0.33 database deployment
 mysql:
@@ -14,21 +13,21 @@ mysql:
   databaseName: mydb
   mysqlUser: user
   mysqlPassword: password
+  imagePullPolicy: Always  # To pull the latest image from the repository
 
-# Service configuration for the rest_app
+# Service configuration for the rest_app and MySQL
 service:
   rest_app:
     name: rest-app-service
     type: LoadBalancer
 
-# Service configuration for MySQL
-service:
   mysql:
     name: mysql-service
     type: ClusterIP  # Choose the appropriate service type for MySQL
 
 # Common configuration
 replicaCount: 5
+
 
 
 
