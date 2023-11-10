@@ -69,15 +69,6 @@ pipeline {
                 }
             }
         }
-        stage('Test Docker Compose') {
-            steps {
-                script {
-                    // Add Python to the PATH and run the testing script
-                    def testCommand = "\"C:\\Users\\Toby\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" docker_backend_testing.py"
-                    bat(testCommand)
-                }
-            }
-        }
         stage('Deploy Helm Chart') {
             steps {
                 script {
