@@ -73,7 +73,7 @@ pipeline {
             steps {
                 script {
                     // Deploy the Helm chart
-                    def helmDeployCommand = "helm upgrade --install my-release ${HELM_CHART_PATH} --set image.tag=${registry}:${IMAGE_VERSION}"
+                    def helmDeployCommand = "helm upgrade --install my-release ${HELM_CHART_PATH} --set image.tag=${registry}:${IMAGE_VERSION} --debug"
                     bat(helmDeployCommand)
                 }
             }
