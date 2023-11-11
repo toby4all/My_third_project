@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-flask
+spec:
+  selector:
+    matchLabels:
+      app: python-flask
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: python-flask
+    spec:
+      containers:
+      - name: python-flask
+        image: {{ .Values.image.repository }}
+        imagePullPolicy: {{ .Values.rest_app.image.pullPolicy }}
+        ports:
+        - containerPort: 5000
