@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   name: python-flask
 spec:
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: python-flask
-  replicas: {{ .Values.replicaCount }}
   template:
     metadata:
       labels:
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: python-flask
-        image: {{ .Values.image.repository }}
+        image: "{{ .Values.rest_app.image.repository }}:{{ .Values.image.tag }}"  # Specify the image here
         imagePullPolicy: {{ .Values.rest_app.image.pullPolicy }}
         ports:
         - containerPort: 5000

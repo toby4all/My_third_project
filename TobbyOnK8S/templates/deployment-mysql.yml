@@ -1,18 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql-deployment
+  name: mysql
 spec:
   replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: mysql  # Update the label to match the app label in the template
   template:
     metadata:
       labels:
-        app: mysql
+        app: mysql  # Update the label to match the selector
     spec:
       containers:
       - name: mysql
-        image: {{ .Values.mysql.image.repository }}:{{ .Values.mysql.image.tag }}
-        imagePullPolicy: {{ .Values.mysql.imagePullPolicy }}  # Use the value from values.yaml
+        image: "{{ .Values.mysql.image.repository }}:{{ .Values.mysql.image.tag }}"
+        imagePullPolicy: {{ .Values.mysql.imagePullPolicy }}
         ports:
         - containerPort: 3306
         env:
@@ -24,3 +27,4 @@ spec:
           value: {{ .Values.mysql.mysqlUser }}
         - name: MYSQL_PASSWORD
           value: {{ .Values.mysql.mysqlPassword }}
+
