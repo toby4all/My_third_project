@@ -67,7 +67,12 @@ pipeline {
         stage('Deploy Helm Chart') {
             steps {
                 script {
-                    def helmDeployCommand ="helm upgrade --install my-release ${HELM_CHART_PATH} --set image.tag=${IMAGE_VERSION} --namespace= tobby-dev --debug"
+                    // Separate the helm upgrade command and its arguments
+                    def helmUpgradeCommand = "helm upgrade --install my-release ${HELM_CHART_PATH}"
+                    def helmUpgradeArgs = "--set image.tag=${IMAGE_VERSION} --namespace=tobby-dev --debug"
+
+                    // Concatenate the command and arguments and execute
+                    def helmDeployCommand = "${helmUpgradeCommand} ${helmUpgradeArgs}"
                     bat(helmDeployCommand)
                 }
             }
@@ -96,3 +101,4 @@ pipeline {
         }
     }
 }
+
