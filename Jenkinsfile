@@ -67,7 +67,7 @@ pipeline {
         stage('Deploy Helm Chart') {
             steps {
                 script {
-                    def helmDeployCommand = "helm upgrade --install my-release ${HELM_CHART_PATH} --set image.tag=${registry}:${IMAGE_VERSION} --debug"
+                    def helmDeployCommand ="helm upgrade --install my-release ${HELM_CHART_PATH} --set image.tag=${IMAGE_VERSION} --namespace= tobby-dev --debug"
                     bat(helmDeployCommand)
                 }
             }
@@ -78,7 +78,7 @@ pipeline {
                     def testCommand = "\"C:\\Users\\Toby\\AppData\\Local\\Programs\\Python\\Python311\\python.exe\" K8S_backend_testing.py"
                     bat(testCommand)
 
-                    def minikubeServiceCommand = "minikube service python-flask-service -url > k8s_url.txt"
+                    def minikubeServiceCommand = "minikube service python-flask-service --url > k8s_url.txt"
                     bat(minikubeServiceCommand)
                 }
             }
