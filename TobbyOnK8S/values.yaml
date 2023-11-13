@@ -2,7 +2,7 @@
 rest_app:
   image:
     repository: toby4all/tobby_pipeline
-    tag: '67'
+    tag: ''
     pullPolicy: Always  # Set to "Always" for the rest-app
 
 # Values for the MySQL 8.0.33 database deployment
